@@ -1,0 +1,11 @@
+# Materiais em PDF
+*.pdf
+
+# Notebooks de exemplo
+Exemple1.ipynb
+Exemple2.ipynb
+Exemple3.ipynb
+
+# Arquivos temporários e de checkpoint
+.ipynb_checkpoints/
+scratch/
