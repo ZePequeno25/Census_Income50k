@@ -1,11 +1,63 @@
-# Materiais em PDF
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_temp
+
+# Environment variables
+.env
+.venv
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Results and figures
+results/
+figures/
+*.png
+*.jpg
+*.jpeg
 *.pdf
 
-# Notebooks de exemplo
-Exemple1.ipynb
-Exemple2.ipynb
-Exemple3.ipynb
+# Large data files (if any)
+*.csv
+!train.csv
+!test.csv
 
-# Arquivos temporários e de checkpoint
-.ipynb_checkpoints/
-scratch/
+# Temporary files
+*.tmp
+*.temp
+~*
