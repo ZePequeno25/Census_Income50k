@@ -157,7 +157,7 @@ CMPINAM_Dataset_05_Adult_Census_Income/
 
 ## 🌐 9. Links do Projeto (GitHub e GitHub Pages)
 
-- **Repositório no GitHub:** https://github.com/ZePequeno25/Census_Income50k
-- **Apresentação do Seminário (GitHub Pages):** https://zepequeno25.github.io/Census_Income50k/apresentacao_seminario.html
-- **Documento Visual — Método Extra (Gradient Boosting):** https://zepequeno25.github.io/Census_Income50k/docs/CMPINAM_extra_gradient_boosting.html
-- **Página Inicial (GitHub Pages):** https://zepequeno25.github.io/Census_Income50k/
+- [Repositório no GitHub](https://github.com/ZePequeno25/Census_Income50k)
+- [Apresentação do Seminário (GitHub Pages)](https://zepequeno25.github.io/Census_Income50k/apresentacao_seminario.html)
+- [Documento Visual — Método Extra: Gradient Boosting](https://zepequeno25.github.io/Census_Income50k/docs/CMPINAM_extra_gradient_boosting.html)
+- [Página Inicial do Projeto (GitHub Pages)](https://zepequeno25.github.io/Census_Income50k/)
