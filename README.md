@@ -152,3 +152,12 @@ CMPINAM_Dataset_05_Adult_Census_Income/
 - Becker, B. & Kohavi, R. (1996). *Adult Dataset*. UCI Machine Learning Repository. [https://doi.org/10.24432/C5XW20](https://doi.org/10.24432/C5XW20).
 - Goodfellow, I., Bengio, Y., & Courville, A. (2016). *Deep Learning*. MIT Press (Capítulo 6 — MLP e Backpropagation).
 - Materiais didáticos da disciplina **CMPINAM** (Prof. Everton Meyer da Silva — IFSP Câmpus Campinas): Aulas 06 (Regressão Logística), 07 (Árvores de Decisão), 08 (KNN), 09 (Random Forest), 11 (SVM) e 12 (Redes Neurais Artificiais).
+
+---
+
+## 🌐 9. Links do Projeto (GitHub e GitHub Pages)
+
+- **Repositório no GitHub:** https://github.com/ZePequeno25/Census_Income50k
+- **Apresentação do Seminário (GitHub Pages):** https://zepequeno25.github.io/Census_Income50k/apresentacao_seminario.html
+- **Documento Visual — Método Extra (Gradient Boosting):** https://zepequeno25.github.io/Census_Income50k/docs/CMPINAM_extra_gradient_boosting.html
+- **Página Inicial (GitHub Pages):** https://zepequeno25.github.io/Census_Income50k/
