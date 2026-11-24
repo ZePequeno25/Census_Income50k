@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMPINAM · Método Extra · Gradient Boosting (HistGradientBoosting)</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCFCFE;--tint:#F3F3F8;--tint-2:#ECECF3;
+  --ink:#16161D;--ink-soft:#565664;--muted:#9A9AAA;
+  --line:#E5E5EE;--line-2:#D6D6E2;
+  --accent:oklch(0.585 0.16 142);--accent-d:oklch(0.49 0.16 142);
+  --accent-soft:oklch(0.955 0.022 142);--accent-line:oklch(0.88 0.07 142);
+  --blue:#2563eb;--blue-soft:#eff6ff;--blue-line:#bfdbfe;
+  --gold:oklch(0.72 0.14 75);--gold-soft:oklch(0.95 0.05 85);
+  --f-d:'Space Grotesk',system-ui,sans-serif;
+  --f-b:'IBM Plex Sans',system-ui,sans-serif;
+  --f-m:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--tint-2);font-family:var(--f-b);color:var(--ink);padding:28px 16px;line-height:1.55}
+.page{max-width:1120px;margin:0 auto;background:var(--paper);border-radius:10px;box-shadow:0 16px 50px rgba(22,22,29,.12);overflow:hidden;border:1px solid var(--line)}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;padding:24px 32px 18px;border-bottom:3px solid var(--accent);background:var(--paper)}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-m);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-d);background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:999px;padding:4px 12px}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.hd h1{font-family:var(--f-d);font-size:28px;font-weight:700;margin-top:8px}
+.hd h1 em{font-style:normal;color:var(--accent-d)}
+.hd .meta{text-align:right;font-size:12.5px;color:var(--ink-soft)}
+.hd .meta b{color:var(--ink);display:block;font-family:var(--f-d)}
+.sec{padding:24px 32px;border-bottom:1px solid var(--line)}
+.sec:last-child{border-bottom:none}
+h2{font-family:var(--f-d);font-size:18px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+h2 .num{font-family:var(--f-m);font-size:12px;color:#fff;background:var(--accent-d);padding:2px 8px;border-radius:5px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.card{background:var(--tint);border:1px solid var(--line);border-radius:8px;padding:16px}
+.card.hl{background:var(--accent-soft);border-color:var(--accent-line)}
+.card.blue{background:var(--blue-soft);border-color:var(--blue-line)}
+.card h3{font-family:var(--f-d);font-size:15px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+.card p,.card li{font-size:13.5px;color:var(--ink-soft)}
+.card ul{padding-left:18px;margin-top:6px}
+.diagram{background:#fff;border:1px solid var(--line-2);border-radius:8px;padding:16px;margin-top:12px;text-align:center}
+.step-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:10px}
+.box{background:var(--tint);border:1.5px solid var(--line-2);border-radius:8px;padding:10px 14px;min-width:170px;text-align:center}
+.box.win{background:var(--accent-soft);border-color:var(--accent)}
+.box b{display:block;font-family:var(--f-d);font-size:13.5px;color:var(--ink)}
+.box span{font-size:12px;color:var(--ink-soft)}
+.arrow{font-family:var(--f-m);font-size:18px;color:var(--accent-d);font-weight:700}
+pre{background:#16161D;color:#FCFCFE;padding:14px 18px;border-radius:8px;font-family:var(--f-m);font-size:12.5px;overflow-x:auto;margin-top:10px;line-height:1.5}
+.kw{color:#93c5fd}.str{color:#86efac}.cm{color:#9ca3af}.numc{color:#fcd34d}
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+.kpi{background:var(--gold-soft);border:1px solid var(--gold);border-radius:8px;padding:12px;text-align:center}
+.kpi .val{font-family:var(--f-d);font-size:26px;font-weight:700;color:var(--accent-d)}
+.kpi .lbl{font-family:var(--f-m);font-size:10.5px;text-transform:uppercase;color:var(--ink-soft);letter-spacing:.06em;margin-top:2px}
+.ft{padding:14px 32px;background:var(--tint);border-top:1px solid var(--line);font-family:var(--f-m);font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between}
+@media(max-width:800px){.grid2,.grid3,.kpi-row{grid-template-columns:1fr}.hd{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="hd">
+    <div>
+      <span class="chip"><span class="dot"></span>CMPINAM · Referência Visual Extra (Além das Aulas)</span>
+      <h1>Gradient Boosting — <em>HistGradientBoostingClassifier</em></h1>
+    </div>
+    <div class="meta">
+      <b>IFSP · Câmpus Campinas</b>
+      Dataset 05 · Adult Census Income<br>
+      Material Complementar ao Modelo.ipynb
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="num">01</span>A Ideia Intuitiva: Aprender com os Próprios Erros</h2>
+    <div class="grid2">
+      <div class="card blue">
+        <h3>🌲 Random Forest (Bagging — Aula 09)</h3>
+        <p>Imagine <b>150 alunos</b> fazendo a prova ao mesmo tempo, sem olhar um para a prova do outro. No final, vence a resposta da maioria.</p>
+        <ul>
+          <li>Árvores crescem <b>em paralelo</b> e de forma independente.</li>
+          <li>Reduz principalmente a <b>variância</b> (instabilidade).</li>
+        </ul>
+      </div>
+      <div class="card hl">
+        <h3>🚀 Gradient Boosting (Boosting — Método Extra)</h3>
+        <p>Imagine <b>1 aluno estudando em sequência</b>: após o 1º simulado, ele olha só para as questões que errou e cria uma nova regra para corrigi-las, repetindo isso 200 vezes.</p>
+        <ul>
+          <li>Árvores crescem <b>em sequência</b>: cada árvore corrige o <b>erro residual</b> das anteriores.</li>
+          <li>Reduz tanto o <b>viés</b> quanto a <b>variância</b>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diagram">
+      <b style="font-family:var(--f-d);font-size:14px;color:var(--ink)">Fluxo Sequencial de Correção de Erros (Gradient Boosting)</b>
+      <div class="step-row">
+        <div class="box"><b>Árvore 1</b><span>Palpite inicial simples<br>Mede os erros (resíduos)</span></div>
+        <div class="arrow">→</div>
+        <div class="box"><b>Árvore 2</b><span>Foca nos casos onde<br>a Árvore 1 mais errou</span></div>
+        <div class="arrow">→</div>
+        <div class="box"><b>... + Árvore t</b><span>Corrige pequenos detalhes<br>com passo <i>learning_rate</i></span></div>
+        <div class="arrow">→</div>
+        <div class="box win"><b>Previsão Final</b><span>Soma ponderada de todas<br>as árvores → Probabilidade</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="num">02</span>Por que "Histogram-Based" (HistGradientBoosting)?</h2>
+    <div class="grid3">
+      <div class="card">
+        <h3>📊 1. Caixas (256 Bins)</h3>
+        <p>Em vez de testar milhares de pontos de corte numéricos, o algoritmo agrupa os números em até <b>256 faixas (histograma)</b>, tornando o treino dezenas de vezes mais rápido.</p>
+      </div>
+      <div class="card">
+        <h3>🛡️ 2. Imune a Outliers & Escala</h3>
+        <p>Como trabalha com faixas ordenadas, picos extremos como <code>capital_gain = 99.999</code> não distorcem o modelo e <b>não exigem StandardScaler</b>.</p>
+      </div>
+      <div class="card">
+        <h3>⚙️ 3. Hiperparâmetros-Chave</h3>
+        <p><b>learning_rate (0.05):</b> tamanho do passo de correção.<br><b>max_iter (200):</b> nº máximo de árvores.<br><b>max_leaf_nodes (31):</b> complexidade de cada árvore.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2><span class="num">03</span>Implementação no Scikit-Learn & Desempenho no Projeto</h2>
+<pre><span class="kw">from</span> sklearn.ensemble <span class="kw">import</span> HistGradientBoostingClassifier
+
+pipe_hgb = Pipeline([
+    (<span class="str">'prep'</span>, preproc_unscaled), <span class="cm"># Sem StandardScaler: árvores em histograma são invariantes à escala</span>
+    (<span class="str">'clf'</span>, HistGradientBoostingClassifier(learning_rate=<span class="numc">0.05</span>, max_iter=<span class="numc">200</span>, max_leaf_nodes=<span class="numc">31</span>, random_state=<span class="numc">42</span>))
+])</pre>
+    <div class="kpi-row">
+      <div class="kpi"><div class="val">86,3%</div><div class="lbl">Acurácia (Maior Geral)</div></div>
+      <div class="kpi"><div class="val">0,686</div><div class="lbl">F1-Score (Maior Geral)</div></div>
+      <div class="kpi"><div class="val">0,917</div><div class="lbl">ROC-AUC (Maior Geral)</div></div>
+      <div class="kpi"><div class="val">0,796</div><div class="lbl">PR-AUC (Maior Geral)</div></div>
+    </div>
+  </div>
+
+  <div class="ft">
+    <span>CMPINAM · IFSP Câmpus Campinas · Referência Visual Extra</span>
+    <span>Inspiração: LightGBM / Friedman (2001) Greedy Function Approximation</span>
+  </div>
+</div>
+</body>
+</html>

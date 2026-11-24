@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seminário CMPINAM · Quem ganha mais de US$ 50 mil por ano?</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCFCFE;--tint:#F3F3F8;--tint-2:#E4E4EE;
+  --ink:#16161D;--ink-soft:#565664;--muted:#8C8CA0;
+  --line:#E5E5EE;--line-2:#D6D6E2;
+  --accent:oklch(0.585 0.16 142);--accent-d:oklch(0.49 0.16 142);
+  --accent-soft:oklch(0.955 0.022 142);--accent-line:oklch(0.88 0.07 142);
+  --gold:oklch(0.72 0.14 75);--gold-soft:oklch(0.95 0.05 85);
+  --warn-soft:#fef2f2;--warn-line:#fecaca;--warn:#dc2626;
+  --blue-soft:#eff6ff;--blue-line:#bfdbfe;--blue:#2563eb;
+  --f-d:'Space Grotesk',system-ui,sans-serif;
+  --f-b:'IBM Plex Sans',system-ui,sans-serif;
+  --f-m:'JetBrains Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1e1e26;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:var(--f-b);color:var(--ink);overflow:hidden}
+.stage{position:relative;width:min(96vw,1220px);aspect-ratio:16/9;background:var(--paper);border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.45);overflow:hidden;display:flex;flex-direction:column}
+.slide{display:none;flex:1;flex-direction:column;justify-content:space-between;padding:28px 40px 20px;height:100%}
+.slide.active{display:flex}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:12px;border-bottom:2px solid var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-m);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-d);background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:999px;padding:4px 12px}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.hd h1{font-family:var(--f-d);font-size:26px;font-weight:700;margin-top:6px;letter-spacing:-.01em}
+.hd h1 em{font-style:normal;color:var(--accent-d)}
+.hd .num-tag{font-family:var(--f-m);font-size:12px;color:var(--ink-soft)}
+.bd{flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:14px 0;min-height:0}
+.ft{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--line);font-family:var(--f-m);font-size:11px;color:var(--ink-soft)}
+/* Cover */
+.cover{justify-content:center;align-items:center;text-align:center;background:radial-gradient(circle at top right, var(--accent-soft), var(--paper) 60%)}
+.cover h1{font-family:var(--f-d);font-size:44px;line-height:1.15;margin:16px 0 12px;max-width:860px}
+.cover h1 em{font-style:normal;color:var(--accent-d)}
+.cover p{font-size:19px;color:var(--ink-soft);max-width:740px}
+.cover .meta-box{margin-top:28px;display:flex;gap:28px;font-size:14px;color:var(--ink-soft);background:var(--tint);padding:12px 24px;border-radius:8px;border:1px solid var(--line)}
+/* Layouts */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:stretch}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{background:var(--tint);border:1px solid var(--line);border-radius:10px;padding:18px}
+.card.hl{background:var(--accent-soft);border-color:var(--accent-line)}
+.card.gold{background:var(--gold-soft);border-color:var(--gold)}
+.card.warn{background:var(--warn-soft);border-color:var(--warn-line)}
+.card.blue{background:var(--blue-soft);border-color:var(--blue-line)}
+.card h3{font-family:var(--f-d);font-size:17px;font-weight:700;margin-bottom:8px;color:var(--ink)}
+.card p,.card li{font-size:15px;line-height:1.48;color:var(--ink-soft)}
+.card ul{padding-left:18px;display:grid;gap:6px}
+.big-num{font-family:var(--f-d);font-size:38px;font-weight:700;color:var(--accent-d);line-height:1.05}
+.big-lbl{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.quote{background:var(--gold-soft);border-left:4px solid var(--gold);padding:14px 18px;border-radius:0 8px 8px 0;font-size:16px;color:var(--ink)}
+/* Tables */
+table.t{width:100%;border-collapse:collapse;font-size:13.5px}
+table.t th,table.t td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:right}
+table.t th:first-child,table.t td:first-child{text-align:left;font-weight:600}
+table.t th{font-family:var(--f-m);font-size:11px;text-transform:uppercase;color:var(--ink-soft);border-bottom:2px solid var(--line-2)}
+table.t tr.win td{background:var(--accent-soft);font-weight:700;color:var(--accent-d)}
+table.t tr.sec td{background:var(--blue-soft);font-weight:600}
+/* Bar viz */
+.bar-row{display:grid;grid-template-columns:200px 1fr 60px;align-items:center;gap:12px;margin-bottom:8px;font-size:14px}
+.bar-track{background:var(--tint-2);height:16px;border-radius:99px;overflow:hidden}
+.bar-fill{height:100%;background:var(--accent);border-radius:99px}
+/* Controls */
+.nav{margin-top:12px;display:flex;align-items:center;gap:16px;color:#d4d4e0;font-family:var(--f-m);font-size:13px}
+.nav button{background:#2d2d3a;color:#fff;border:1px solid #444458;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:var(--f-m);font-size:12px}
+.nav button:hover{background:var(--accent-d);border-color:var(--accent)}
+.prog{position:absolute;bottom:0;left:0;height:4px;background:var(--accent);transition:width .25s ease}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="prog" id="prog"></div>
+
+  <!-- SLIDE 1: CAPA -->
+  <section class="slide cover active">
+    <span class="chip"><span class="dot"></span>Seminário · CMPINAM · IFSP Campinas</span>
+    <h1>Quem ganha mais de <em>US$ 50 mil</em> por ano?</h1>
+    <p>Ensinando o computador a prever a renda de adultos a partir de dados do Censo — explicado de um jeito que todo mundo entende!</p>
+    <div class="meta-box">
+      <span><b>Aluno:</b> Kelvin Aparecido Lima Albuquerque</span>
+      <span><b>Professor:</b> Prof. Everton Meyer da Silva</span>
+      <span><b>Base:</b> Adult Census Income (1994)</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: O PROBLEMA (VERSÃO VOVÓ) -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Introdução</span><h1>O Problema: <em>Explicado para a Vovó</em></h1></div>
+      <div class="num-tag">Slide 02 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="quote">
+        👵 <b>Imagine uma caixa com milhares de fichas de papel</b> de uma pesquisa antiga do governo dos EUA (1994). Cada ficha conta um pouco da vida de uma pessoa adulta.
+      </div>
+      <div class="g2">
+        <div class="card">
+          <h3>📋 O que está escrito em cada ficha?</h3>
+          <ul>
+            <li>Quantos anos a pessoa tem;</li>
+            <li>Até que série ou faculdade estudou;</li>
+            <li>Qual é a profissão e quantas horas trabalha;</li>
+            <li>Se é casada ou solteira;</li>
+            <li>Se ganhou dinheiro extra com investimentos.</li>
+          </ul>
+        </div>
+        <div class="card hl">
+          <h3>🎯 O nosso desafio</h3>
+          <p style="font-size:16px;margin-bottom:10px">Ensinar o computador a ler essas pistas e dar um <b>palpite inteligente</b>:</p>
+          <p style="font-size:18px;font-weight:700;color:var(--accent-d)">"Essa pessoa ganha MAIS de US$ 50 mil por ano, ou 50 mil ou MENOS?"</p>
+          <p style="margin-top:10px">Testamos <b>9 jeitos diferentes</b> de ensinar o computador para descobrir qual é o melhor aluno!</p>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Adult Census Income</span><span>Classificação Binária</span></div>
+  </section>
+
+  <!-- SLIDE 3: A BASE E LIMPEZA -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Base de Dados</span><h1>Arrumando a Cozinha: <em>As Fichas e a Limpeza</em></h1></div>
+      <div class="num-tag">Slide 03 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g4">
+        <div class="card"><div class="big-num">32.561</div><div class="big-lbl">Fichas originais para estudo (Treino)</div></div>
+        <div class="card hl"><div class="big-num">29.096</div><div class="big-lbl">Fichas únicas após tirar 3.465 cópias repetidas</div></div>
+        <div class="card blue"><div class="big-num">16.281</div><div class="big-lbl">Fichas guardadas no "Envelope Lacrado" (Prova Final)</div></div>
+        <div class="card gold"><div class="big-num">75% / 25%</div><div class="big-lbl">3 em cada 4 pessoas ganham ≤ 50k (Base Desbalanceada)</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <h3>🧹 O que fizemos antes de estudar?</h3>
+          <ul>
+            <li><b>Tiramos fichas repetidas:</b> Para o computador não decorar perguntas iguais.</li>
+            <li><b>Preenchemos lacunas sem colar:</b> Algumas fichas não tinham profissão anotada — preenchemos usando apenas o padrão das fichas de estudo.</li>
+          </ul>
+        </div>
+        <div class="card warn">
+          <h3>🔒 Regra de Ouro: Sem Trapaça!</h3>
+          <p>As <b>16.281 fichas da prova final</b> ficaram trancadas o tempo todo. O computador nunca espiou essas respostas durante o treinamento — só abrimos o envelope no finalzinho para dar a nota justa!</p>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Base e Preparação</span><span>Controle rigoroso contra vazamento de dados</span></div>
+  </section>
+
+  <!-- SLIDE 4: ACHADOS DA EDA (PARTE 1) -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Análise Exploratória (EDA)</span><h1>O que Descobrimos? <em>Quem Ganha Mais</em></h1></div>
+      <div class="num-tag">Slide 04 / 14</div>
+    </div>
+    <div class="bd">
+      <p style="font-size:15.5px;color:var(--ink-soft)">Antes de criar qualquer fórmula, investigamos <b>8 perguntas</b> nos dados usando histogramas, boxplots, gráficos de barras e mapas de calor:</p>
+      <div class="g3">
+        <div class="card hl">
+          <h3>🎓 Estudo Faz Diferença</h3>
+          <p>Quem tem <b>doutorado, mestrado ou faculdade</b> tem chance muito maior de passar dos 50 mil do que quem parou no ensino médio.</p>
+        </div>
+        <div class="card hl">
+          <h3>💍 Estado Civil e Idade</h3>
+          <p>Pessoas <b>casadas</b> e na faixa de <b>35 a 55 anos</b> (auge da carreira) aparecem com muito mais frequência no grupo de alta renda.</p>
+        </div>
+        <div class="card hl">
+          <h3>⏰ Carga Horária e Cargo</h3>
+          <p>Trabalhar <b>mais de 40 horas/semana</b> e atuar em cargos de <b>gerência ou especialização</b> eleva bastante a probabilidade de renda maior.</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>🔍 As 8 Pistas de Ouro Selecionadas para os Modelos:</h3>
+        <p style="margin-top:4px"><b>Ganho de capital</b> · <b>Estado civil</b> · <b>Papel na família</b> · <b>Escolaridade</b> · <b>Profissão</b> · <b>Horas por semana</b> · <b>Idade</b> · <b>Sexo</b></p>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Achados da EDA</span><span>8 perguntas respondidas com gráficos</span></div>
+  </section>
+
+  <!-- SLIDE 5: ACHADOS DA EDA (PARTE 2 - ESCALA) -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Análise Exploratória (EDA)</span><h1>A Armadilha dos Números Gigantes e a <em>Régua Justa</em></h1></div>
+      <div class="num-tag">Slide 05 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g2">
+        <div class="card warn">
+          <h3>⚠️ O Problema: Escalas Muito Diferentes</h3>
+          <p>Olhe a diferença de tamanho entre os números na ficha:</p>
+          <ul style="margin-top:8px">
+            <li><b>Idade:</b> vai de <b>17</b> a <b>90</b> anos.</li>
+            <li><b>Horas/semana:</b> vai de <b>1</b> a <b>99</b> horas.</li>
+            <li><b>Ganho de capital:</b> vai de <b>0</b> a <b>99.999 dólares!</b></li>
+          </ul>
+          <p style="margin-top:10px">Sem cuidado, o número 99.999 faz a idade parecer "zero" — respondendo por <b>99,9% da conta de distância</b>!</p>
+        </div>
+        <div class="card hl">
+          <h3>📏 A Solução: Colocar na Mesma Régua</h3>
+          <p>Usamos uma ferramenta chamada <b>StandardScaler</b> que coloca todas as medidas na mesma escala justa antes de treinar modelos baseados em distância ou neurônios (KNN, SVM, Rede Neural).</p>
+          <p style="margin-top:10px">Já os modelos de <b>Árvore (Random Forest e Gradient Boosting)</b> olham apenas a ordem ("maior ou menor") e <b>não caem nessa armadilha!</b></p>
+        </div>
+      </div>
+      <div class="quote">
+        💡 <b>Resumo da EDA:</b> Na faixa central (30–50 anos, 40h/semana) os dois grupos se misturam bastante — por isso precisamos de modelos inteligentes e não lineares!
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · EDA Orientada aos Modelos</span><span>Por que padronizar é vital</span></div>
+  </section>
+
+  <!-- SLIDE 6: COMO AVALIAMOS (SEM TRAPAÇA & MÉTRICAS) -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Metodologia</span><h1>Como Damos Nota aos Modelos <em>(Sem Enganação)</em></h1></div>
+      <div class="num-tag">Slide 06 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="card blue">
+        <h3>⚠️ Por que acertar 76% não basta?</h3>
+        <p>Como 76,4% das pessoas na prova ganham até 50 mil, um aluno preguiçoso que responder <b>"ganha menos" para todo mundo</b> já tira 7,6 de nota sem acertar ninguém de alta renda! Por isso usamos 4 notas no boletim:</p>
+      </div>
+      <div class="g4">
+        <div class="card"><h3>🎯 Acurácia</h3><p>De cada 100 fichas, quantas o modelo acertou no total.</p></div>
+        <div class="card"><h3>🔍 Precisão</h3><p>Quando o modelo diz <i>"ganha >50k"</i>, quantas vezes ele estava certo?</p></div>
+        <div class="card"><h3>📡 Recall (Radar)</h3><p>De todos que realmente ganham >50k, quantos o modelo conseguiu achar?</p></div>
+        <div class="card hl"><h3>⚖️ F1 & ROC-AUC</h3><p><b>F1</b> equilibra Precisão e Radar. <b>ROC-AUC</b> (0 a 1) mede o talento geral de separar os grupos.</p></div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Validação e Métricas</span><span>Validação Cruzada (Simulados) antes do Teste</span></div>
+  </section>
+
+  <!-- SLIDE 7: MODELOS CLÁSSICOS -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Modelos 1 a 4</span><h1>Os Primeiros Alunos: <em>Da Preguiça às 20 Perguntas</em></h1></div>
+      <div class="num-tag">Slide 07 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g2">
+        <div class="card">
+          <h3>😴 Baseline — O Chute Preguiçoso</h3>
+          <p>Chuta sempre a maioria (≤ 50k). Acurácia de <b>76,4%</b>, mas F1 = <b>0,000</b>. É a linha mínima a bater.</p>
+        </div>
+        <div class="card">
+          <h3>📋 Regras Explícitas — Receita de Bolo</h3>
+          <p>Regras escritas à mão (ex.: <i>ganho alto OU faculdade + 40h</i>). Acha 88,8% dos ricos, mas gera muitos alarmes falsos (Acurácia 70,7%).</p>
+        </div>
+        <div class="card blue">
+          <h3>⚖️ Regressão Logística — A Balança de Pontos</h3>
+          <p>Soma e subtrai pontos para cada pista e dá a chance em %. É o modelo <b>mais transparente</b> (explica cada peso via <i>Odds Ratio</i>). <b>F1 = 0,667</b>.</p>
+        </div>
+        <div class="card">
+          <h3>🌳 Árvore de Decisão — 20 Perguntas</h3>
+          <p>Faz perguntas de "Sim ou Não" em sequência até decidir. Simples e visual, atingiu <b>84,9%</b> de acurácia com poda controlada.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Modelos Clássicos</span><span>Aulas 04, 05, 06 e 07</span></div>
+  </section>
+
+  <!-- SLIDE 8: KNN, RANDOM FOREST E SVM -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Modelos 5 a 7</span><h1>Vizinhos, Conselho de Árvores e <em>Cerca Segura</em></h1></div>
+      <div class="num-tag">Slide 08 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g3">
+        <div class="card">
+          <h3>🏘️ KNN (Aula 08)</h3>
+          <p><i>"Diga-me com quem andas"</i></p>
+          <ul style="margin-top:8px">
+            <li>Olha as <b>15 pessoas mais parecidas</b> e vota pela maioria.</li>
+            <li>Sem régua justa perde muito; com régua chegou a <b>83,5%</b>.</li>
+          </ul>
+        </div>
+        <div class="card hl">
+          <h3>🌲 Random Forest (Aula 09)</h3>
+          <p><i>"O Conselho de 150 Árvores"</i></p>
+          <ul style="margin-top:8px">
+            <li>Cria <b>150 árvores independentes</b> e faz uma votação.</li>
+            <li>Não sofre com números gigantes! Atingiu <b>85,5% de acurácia</b> e <b>75,5% de precisão</b>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🚧 SVM (Aula 11)</h3>
+          <p><i>"A Cerca Mais Segura"</i></p>
+          <ul style="margin-top:8px">
+            <li>Desenha uma fronteira mantendo a maior folga possível entre os grupos.</li>
+            <li>Com régua justa atingiu <b>84,7%</b> de acurácia.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Aulas 08, 09 e 11</span><span>Da votação local ao consenso em floresta</span></div>
+  </section>
+
+  <!-- SLIDE 9: REDE NEURAL (AULA 12) -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Modelo 8 · Aula 12</span><h1>O Pequeno Cérebro: <em>Rede Neural Artificial (MLP)</em></h1></div>
+      <div class="num-tag">Slide 09 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g2">
+        <div class="card hl">
+          <h3>🧠 Como funciona por dentro?</h3>
+          <ul>
+            <li>Imita neurônios ligados em camadas: <b>48 entradas → 16 neurônios ocultos (ReLU) → 1 saída (%)</b>.</li>
+            <li>Ao todo são <b>801 "parafusinhos" (pesos)</b> que começam chutando e vão se ajustando sozinhos a cada erro.</li>
+            <li>Testamos arquiteturas e escolhemos a mais enxuta: <b>MLP (16,)</b>.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>📉 Aprendizado em 97 Rodadas</h3>
+          <p>Em cada rodada (época), a rede prevê, mede seu erro e corrige os pesos:</p>
+          <div style="margin-top:14px">
+            <div class="bar-row"><span>Rodada 1 (Início)</span><div class="bar-track"><div class="bar-fill" style="width:85%;background:#e74c3c"></div></div><b>0,643</b></div>
+            <div class="bar-row"><span>Rodada 97 (Final)</span><div class="bar-track"><div class="bar-fill" style="width:41%;background:var(--accent)"></div></div><b>0,314</b></div>
+          </div>
+          <p style="margin-top:10px;font-size:14px">Resultado no teste: <b>85,2% acurácia</b>, <b>F1 = 0,668</b> e <b>ROC-AUC = 0,906</b>!</p>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Aula 12</span><span>Redes Neurais Artificiais (Multilayer Perceptron)</span></div>
+  </section>
+
+  <!-- SLIDE 10: MÉTODO EXTRA (GRADIENT BOOSTING) -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Modelo 9 · Método Extra</span><h1>Além das Aulas: <em>Gradient Boosting em Histogramas</em></h1></div>
+      <div class="num-tag">Slide 10 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="quote">
+        🚀 Como funciona? Enquanto a <b>Random Forest</b> cria 150 árvores separadas ao mesmo tempo, o <b>Gradient Boosting</b> cria árvores <b>em fila</b>: cada árvore nova estuda <b>só os erros</b> que as anteriores cometeram!
+      </div>
+      <div class="g2">
+        <div class="card">
+          <h3>📊 O truque do Histograma (HistGradientBoosting)</h3>
+          <ul>
+            <li>Agrupa números em caixinhas organizadas (256 faixas), deixando o treino super rápido.</li>
+            <li>Não precisa de régua (StandardScaler) e lida naturalmente com valores extremos.</li>
+          </ul>
+        </div>
+        <div class="card hl">
+          <h3>🏆 Desempenho Recorde na Prova Final</h3>
+          <ul>
+            <li><b>Acurácia:</b> <b>86,3%</b> (Maior de todos!)</li>
+            <li><b>F1-Score:</b> <b>0,686</b> (Maior de todos!)</li>
+            <li><b>ROC-AUC:</b> <b>0,917</b> (Maior de todos!)</li>
+            <li><b>PR-AUC:</b> <b>0,796</b> (Maior de todos!)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Método Extra (Não visto em aula)</span><span>HistGradientBoostingClassifier (Scikit-Learn)</span></div>
+  </section>
+
+  <!-- SLIDE 11: BOLETIM FINAL -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Resultados Oficiais</span><h1>O Boletim Final: <em>Todos os 9 Modelos Frente a Frente</em></h1></div>
+      <div class="num-tag">Slide 11 / 14</div>
+    </div>
+    <div class="bd">
+      <table class="t">
+        <thead>
+          <tr><th>Modelo</th><th>Acurácia</th><th>Precisão (>50k)</th><th>Recall (>50k)</th><th>F1-Score</th><th>ROC-AUC</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Baseline (Chute Preguiçoso)</td><td>76,4%</td><td>0,0%</td><td>0,0%</td><td>0,000</td><td>—</td></tr>
+          <tr><td>Modelo Explícito (Regras)</td><td>72,0%</td><td>45,2%</td><td><b>86,7%</b></td><td>0,594</td><td>—</td></tr>
+          <tr><td>Regressão Logística (Balança)</td><td>80,1%</td><td>55,2%</td><td>84,4%</td><td>0,667</td><td>0,899</td></tr>
+          <tr><td>Árvore de Decisão (20 Perguntas)</td><td>84,9%</td><td>74,2%</td><td>55,1%</td><td>0,632</td><td>0,887</td></tr>
+          <tr><td>KNN (15 Vizinhos)</td><td>83,5%</td><td>67,1%</td><td>59,3%</td><td>0,629</td><td>0,881</td></tr>
+          <tr><td>SVM Linear (Cerca Segura)</td><td>84,7%</td><td>73,0%</td><td>56,2%</td><td>0,635</td><td>0,899</td></tr>
+          <tr class="sec"><td>🌲 Random Forest (Aula 09)</td><td>85,5%</td><td>73,8%</td><td>59,6%</td><td>0,660</td><td>0,908</td></tr>
+          <tr class="sec"><td>🧠 Rede Neural MLP (Aula 12)</td><td>85,2%</td><td>71,0%</td><td>63,0%</td><td>0,668</td><td>0,906</td></tr>
+          <tr class="win"><td>🚀 Gradient Boosting (Método Extra)</td><td><b>86,3%</b></td><td><b>75,0%</b></td><td>63,2%</td><td><b>0,686</b></td><td><b>0,917</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ft"><span>CMPINAM · Avaliação no Teste Oficial (16.281 fichas)</span><span>O método extra lidera em acurácia, F1 e ROC-AUC</span></div>
+  </section>
+
+  <!-- SLIDE 12: INTERPRETAÇÃO PRÁTICA -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Na Prática</span><h1>O que Isso Significa <em>na Vida Real?</em></h1></div>
+      <div class="num-tag">Slide 12 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g2">
+        <div class="card hl">
+          <h3>💼 Exemplo: Campanha de Cartão Premium</h3>
+          <p>Imagine um banco querendo oferecer um cartão exclusivo apenas para quem ganha > US$ 50 mil:</p>
+          <ul style="margin-top:8px">
+            <li><b>Erro tipo 1 (Falso Positivo):</b> Convidar quem ganha menos — gera custo de propaganda desperdiçada.</li>
+            <li><b>Erro tipo 2 (Falso Negativo):</b> Deixar de convidar um bom cliente — perde oportunidade de negócio.</li>
+          </ul>
+        </div>
+        <div class="card blue">
+          <h3>⚖️ O Equilíbrio Ideal</h3>
+          <p>O <b>Gradient Boosting</b> e a <b>Random Forest</b> garantem que <b>3 em cada 4 pessoas convidadas</b> realmente estejam na faixa de alta renda (75% de precisão), encontrando muito mais clientes certos do que as regras manuais!</p>
+          <p style="margin-top:8px">Se a lei exigir explicar exatamente o porquê da resposta, usamos a <b>Regressão Logística</b> (transparente).</p>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Interpretação no Contexto do Problema</span><span>Decisões orientadas a negócio</span></div>
+  </section>
+
+  <!-- SLIDE 13: LIMITAÇÕES E ÉTICA -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Limitações e Ética</span><h1>Cuidados Importantes e <em>Próximos Passos</em></h1></div>
+      <div class="num-tag">Slide 13 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g2">
+        <div class="card warn">
+          <h3>⚠️ Limitações da Base (1994)</h3>
+          <ul>
+            <li><b>Dados antigos:</b> 50 mil dólares em 1994 valem muito mais do que hoje, e profissões de tecnologia não existiam como hoje.</li>
+            <li><b>Preconceito histórico:</b> Os dados antigos refletiam desigualdades de gênero e raça da época. Usar esses dados na vida real sem filtro ético seria injusto.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🚀 Melhorias Futuras</h3>
+          <ul>
+            <li><b>Novas pistas:</b> Criar a diferença entre ganhos e perdas financeiras.</li>
+            <li><b>Auditoria ética (Fairness):</b> Remover gênero e raça do treino para garantir decisões justas.</li>
+            <li><b>Calibração de corte:</b> Ajustar a régua de decisão conforme o custo financeiro real de cada erro.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · Uso Estritamente Educacional</span><span>Ética e responsabilidade em IA</span></div>
+  </section>
+
+  <!-- SLIDE 14: CONCLUSÃO FINAL -->
+  <section class="slide">
+    <div class="hd">
+      <div><span class="chip"><span class="dot"></span>Conclusão</span><h1>Resumo Final: <em>Qual Campeão Escolher?</em></h1></div>
+      <div class="num-tag">Slide 14 / 14</div>
+    </div>
+    <div class="bd">
+      <div class="g3">
+        <div class="card hl">
+          <h3>🏆 Campeão Absoluto</h3>
+          <p><b>Gradient Boosting (Método Extra)</b></p>
+          <p style="margin-top:8px">Melhor em tudo na prova final: <b>86,3% de acurácia</b>, <b>F1 = 0,686</b> e <b>ROC-AUC = 0,917</b>. Aprende corrigindo os próprios erros!</p>
+        </div>
+        <div class="card gold">
+          <h3>🥈 Melhores das Aulas</h3>
+          <p><b>Random Forest & MLP</b></p>
+          <p style="margin-top:8px"><b>Random Forest (85,5%)</b> brilha em precisão e estabilidade; a <b>Rede Neural (F1 = 0,668)</b> mostra o poder de aprender em camadas.</p>
+        </div>
+        <div class="card blue">
+          <h3>🥉 Campeã em Clareza</h3>
+          <p><b>Regressão Logística</b></p>
+          <p style="margin-top:8px">Imbatível quando precisamos explicar em português claro o peso de cada característica na decisão final.</p>
+        </div>
+      </div>
+      <div class="quote" style="text-align:center;font-weight:600">
+        🙏 Obrigado pela atenção! Alguma dúvida?
+      </div>
+    </div>
+    <div class="ft"><span>CMPINAM · IFSP Câmpus Campinas · 2026</span><span>Kelvin Aparecido Lima Albuquerque</span></div>
+  </section>
+
+</div>
+
+<div class="nav">
+  <button onclick="go(-1)">← Anterior</button>
+  <span id="counter">1 / 14</span>
+  <button onclick="go(1)">Próximo →</button>
+  <span style="opacity:.6;font-size:11px">(Use as setas ← → ou Espaço)</span>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const counter = document.getElementById('counter');
+const prog = document.getElementById('prog');
+let idx = 0;
+
+function show(i){
+  idx = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+  counter.textContent = (idx + 1) + ' / ' + slides.length;
+  prog.style.width = ((idx + 1) / slides.length * 100) + '%';
+}
+function go(delta){ show(idx + delta); }
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+  if(e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+});
+show(0);
+</script>
+</body>
+</html>

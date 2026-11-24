@@ -52,6 +52,17 @@ figures/
 *.jpeg
 *.pdf
 
+# Materiais de aula e exemplos (mantendo docs/CMPINAM_extra_gradient_boosting.html e Modelo.ipynb)
+Projeto da Disciplina.html
+docs/CMPINAM_aula_*.html
+docs/CMPINAM_arvores_de_decisao.html
+docs/CMPINAM_regressao_linear_com_uma_variavel.html
+notebooks/Exemple*.ipynb
+notebooks/CMPINAM_*.ipynb
+notebooks/build_notebook_complete.py
+slide_cmpinam.html
+roteiro_apresentacao.md
+
 # Large data files (if any)
 *.csv
 !train.csv
